@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <stdlib.h>
 #include <stdio.h>
-#include<string.h>
+#include<string>
 #include<fstream> 
 #define BUFLEN 256
 
