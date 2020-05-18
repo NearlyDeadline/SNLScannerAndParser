@@ -38,7 +38,7 @@ VarIdMore,$
 VarIdMore,COMMA,VarIdList
 ProcDecpart,$
 ProcDecpart,ProcDec
-ProcDec,PROCEDURE,ProcName,LPAREN,ParamList,RPAREN,SEMI,ProcDecpartPart,ProcBody,ProcDecMore
+ProcDec,PROCEDURE,ProcName,LPAREN,ParamList,RPAREN,SEMI,ProcDecPart,ProcBody,ProcDecMore
 ProcDecMore,$
 ProcDecMore,ProcDec
 ProcName,ID
@@ -52,7 +52,7 @@ Param,VAR,TypeDef,FormList
 FormList,ID,FidMore
 FidMore,$
 FidMore,COMMA,FormList
-ProcDecpart,DeclarePart
+ProcDecPart,DeclarePart
 ProcBody,ProgramBody
 ProgramBody,BEGIN,StmList,END
 StmList,Stm,StmMore
