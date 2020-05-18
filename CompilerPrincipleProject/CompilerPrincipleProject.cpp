@@ -3,12 +3,6 @@
 
 #include "table.h"
 #include "Scanner.h"
-#include <fstream>
-#include <iostream>
-using std::ifstream;
-using std::string;
-using std::getline;
-using std::vector;
 
 void split(const string& s, vector<string>& tokens, const string& delimiters = " ") {
 	tokens.clear();
@@ -20,38 +14,10 @@ void split(const string& s, vector<string>& tokens, const string& delimiters = "
 		pos = s.find_first_of(delimiters, lastPos);
 	}
 }
-void CreateProductions(string filepath = "productions.txt") {
-	ifstream file;
-	file.open(filepath);
-	if (!file.is_open()) {
-		return;
-	}
-	Production pro;
-	vector<string> str;
-	vector<string> lines;
-	string text;
-	while (file >> text) {
-		split(text, lines, "\n");
-		for (auto i : lines) {
-			split(i, str, ",");
-			pro.left = str[0];
-			for (size_t i = 1; i < str.size(); i++) {
-				pro.right.push_back(str[i]);
-			}
-			productions.push_back(pro);
-			pro.right.clear();
-		}
-	}
-	file.close();
-}
+
 int main()
 {
-	FILE* fp = nullptr;
-	fopen_s(&fp,"source1.txt", "r");
-	Scanner scanner = Scanner();
-	scanner.getTokenList(fp);
-	scanner.printTokenList();
-	fclose(fp);
+	Table table("productions.txt");
 	return 0;
 }
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
