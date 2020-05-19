@@ -14,7 +14,7 @@ public:
 class Table {//LL1分析表
 public:
 	size_t get_production_index(const std::string& non_terminal, const std::string& terminal) const;
-	//根据当前非终极符non_terminal和输入符号terminal，返回应选择的产生式序号（从0开始）
+	//根据当前非终极符non_terminal和输入符号terminal，返回应选择的产生式序号（从1开始，0代表出错）
 
 	Table(const std::string& filepath);
 	//根据产生式文件构造predict集
@@ -42,6 +42,15 @@ private:
 
 	std::vector<std::set<std::string>> get_follow_sets() const;
 	//计算follow集合，返回全部非终极符的follow集合
+
+	std::vector<std::set<std::string>> iterate_follow_sets(const std::vector<std::set<std::string>>& prev) const;
+	//根据传入的follow集合prev，再进行一次迭代计算。若结果与prev相同，则表示已收敛，否则需要继续计算
+
+	bool is_different(const std::vector<std::set<std::string>>& lhs, const std::vector<std::set<std::string>>& rhs) const;
+	//判断两个follow集合列表lhs与rhs是否相同
+
+	bool is_different(const std::set<std::string>& lhs, const std::set<std::string>& rhs) const;
+	//判断两个follow集合lhs与rhs是否相同
 
 	std::set<std::string> get_predict_set(const Production& pro, const std::vector<std::set<std::string>>& first_sets, 
 		const std::vector<std::set<std::string>>& follow_sets) const;

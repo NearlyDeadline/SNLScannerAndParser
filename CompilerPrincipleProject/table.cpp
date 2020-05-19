@@ -1,6 +1,6 @@
 #include "table.h"
 #include <fstream>
-#include <iostream>
+#include <algorithm>
 
 using std::ifstream;
 using std::string;
@@ -12,18 +12,18 @@ using std::set;
 
 extern void split(const string& s, vector<string>& tokens, const string& delimiters = " ");
 
-Table::Table(const std::string& filepath)
+Table::Table(const string& filepath)
 {
 	read_productions_nonterminals(filepath);
 	create_terminals();
 	initialize_table();
 }
 
-void Table::read_productions_nonterminals(const std::string& filepath)
+void Table::read_productions_nonterminals(const string& filepath)
 {
-	ifstream file;
-	file.open(filepath);
-	if (!file.is_open()) {
+	ifstream productions_file;
+	productions_file.open(filepath);
+	if (!productions_file.is_open()) {
 		return;
 	}
 	Production pro;//待加入的产生式
@@ -31,7 +31,7 @@ void Table::read_productions_nonterminals(const std::string& filepath)
 	string line;//文件中的一行
 	int nonterminal_index = 0;//非终极符序号
 	pair<unordered_map<string, int>::iterator, bool> insert_pair;//若bool为false，说明非终极符已存在序号，无需增加，否则加1
-	while (getline(file, line, '\n')/* && !line.empty()*/) {
+	while (getline(productions_file, line, '\n')/* && !line.empty()*/) {
 		split(line, symbols, ",");
 		pro.left = symbols.at(0);
 		insert_pair = nonterminals.insert(unordered_map<string, int>::value_type(pro.left, nonterminal_index));
@@ -44,7 +44,7 @@ void Table::read_productions_nonterminals(const std::string& filepath)
 		pro.left.erase();
 		pro.right.clear();
 	}
-	file.close();
+	productions_file.close();
 }
 
 void Table::create_terminals()
@@ -52,9 +52,9 @@ void Table::create_terminals()
 	int terminal_index = 0;//终极符序号
 	pair<unordered_map<string, int>::iterator, bool> insert_pair;//若bool为false，说明终极符已存在序号，无需增加，否则加1
 	for (const Production& i : productions) {
-		for (const string& ch : i.right) {
-			if (!is_nonterminal(ch)) {
-				insert_pair = terminals.insert(unordered_map<string, int>::value_type(ch, terminal_index));
+		for (const string& symbol : i.right) {
+			if (!is_nonterminal(symbol)) {
+				insert_pair = terminals.insert(unordered_map<string, int>::value_type(symbol, terminal_index));
 				if (insert_pair.second)
 					terminal_index++;
 			}
@@ -65,51 +65,31 @@ void Table::create_terminals()
 
 void Table::initialize_table()
 {
-	int line_count = nonterminals.size();
-	table.reserve(line_count);
-	vector<int> line(terminals.size(), 0);//一行，长度为终极符个数（列数），初始化为0,代表无可用文法产生式
-	for (int i = 0; i < line_count; i++) {
-		table.push_back(line);
-	}
-	vector<set<string>> first_sets;
-	first_sets.reserve(nonterminals.size());
+	vector<set<string>> first_sets(nonterminals.size());
 	for (auto i : nonterminals) {
-		first_sets.push_back(get_first_set(i.first));
+		first_sets.at(i.second) = get_first_set(i.first);
 	}
 	vector<set<string>> follow_sets = get_follow_sets();//保存文法所有非终极符相应的follow集
-
-	for (Production& pro : productions)
+	vector<int> each_line(terminals.size(), 0);
+	size_t line_count = nonterminals.size();
+	for (size_t i = 0; i < line_count; i++)
+		table.push_back(each_line);
+	int production_index = 1;
+	for (Production& pro : productions) {
 		pro.predict_set = get_predict_set(pro, first_sets, follow_sets);
-	/*
-	std::ofstream test("test.txt");
-
-	for (auto i : first_sets) {
-		for (const string& j : i) {
-			test << j << " ";
+		for (const string& terminal : pro.predict_set) {
+			table[nonterminals.find(pro.left)->second][terminals.find(terminal)->second] = production_index;
 		}
-		test << "\n";
+		production_index++;
 	}
-
-	test.close();
-	std::ifstream strs("test.txt");
-	string str;
-	test.open("test2.txt");
-	for (auto i : nonterminals) {
-		getline(strs, str, '\n');
-		test << "序号为"<< i.second << "的非终极符" << i.first << "的首部为：" << str << "\n";
-	}
-	strs.close();
-	test.close();
-	*/
-	
 }
 
-set<string> Table::get_first_set(const std::string & symbol) const
+set<string> Table::get_first_set(const string & symbol) const
 {
 	set<string> result;
 	if (is_terminal(symbol))//若为终极符,结果为本身
 		result.insert(symbol);
-	else if (is_nonterminal(symbol)){//若为非终极符,则需要遍历一遍所有左部为它的产生式
+	else if (is_nonterminal(symbol)) {//若为非终极符,则需要遍历一遍所有左部为它的产生式
 		for (const Production& pro : productions) {
 			if (pro.left == symbol) {
 				if (is_terminal(pro.right.at(0)))//右部第一个文法符号为终极符或空串,则加入
@@ -121,13 +101,13 @@ set<string> Table::get_first_set(const std::string & symbol) const
 					bool can_deduct_empty = true;
 					for (int i = 0; i < first_terminal_index; i++) {
 						temp = get_first_set(pro.right.at(i));
-						if (temp.find("$") != temp.end()) {//当前非终极符推导出了空串
+						if (temp.find("$") != temp.end()) {//当前非终极符推导出了空串，删除空串并加入结果
 							temp.erase("$");
 							for (const string& sym : temp) {
 								result.insert(sym);
 							}
 						}
-						else {//当前非终极符未推导出空串
+						else {//当前非终极符未推导出空串，加入结果，直接退出循环
 							can_deduct_empty = false;
 							for (const string& sym : temp) {
 								result.insert(sym);
@@ -145,10 +125,12 @@ set<string> Table::get_first_set(const std::string & symbol) const
 			}
 		}
 	}
+	else if (symbol.empty())//传了个空串进来
+		result.insert("$");
 	return result;
 }
 
-set<string> Table::get_first_set(const std::vector<std::string>& symbols) const
+set<string> Table::get_first_set(const vector<string>& symbols) const
 {
 	set<string> result;
 	set<string> temp;
@@ -156,42 +138,134 @@ set<string> Table::get_first_set(const std::vector<std::string>& symbols) const
 	bool can_deduct_empty = true;
 	for (size_t i = 0; i < length; i++) {
 		temp = get_first_set(symbols.at(i));
-		if (temp.find("$") == temp.end()) {
+		if (temp.find("$") == temp.end()) {//这个符号不能推导空串，加入当前符号的first集后退出
 			can_deduct_empty = false;
 			for (const string &i : temp)
 				result.insert(i);
 			break;
 		}
-		else {
+		else {//这个符号能推导空串，把first集去掉空串，加入结果，然后判断下一个符号
 			temp.erase("$");
 			for (const string& i : temp)
 				result.insert(i);
 		}
 	}
-	if (can_deduct_empty)
+	if (can_deduct_empty)//全部符号中都能推导出空串
 		result.insert("$");
 	return result;
 }
 
 vector<set<string>> Table::get_follow_sets() const
 {
+	vector<set<string>> prev(nonterminals.size(), set<string>());
+	const string start_symbol = "Program";//文法开始符，加入#
+	prev.at(nonterminals.find(start_symbol)->second).insert("#");
 	vector<set<string>> result;
+	do {
+		result.assign(prev.begin(), prev.end());
+		prev = iterate_follow_sets(prev);
+	} while (is_different(result, prev));//如果result和prev有任一处不同，则代表未收敛，停止判断不同，执行下一次迭代
+	return result;
+}
+
+vector<set<string>> Table::iterate_follow_sets(const vector<set<string>>& prev) const
+{
+	vector<set<string>> result(prev);
+	vector<string>::const_iterator B_index;
+	for (auto B : nonterminals) {
+		for (const Production& pro : productions) {
+			B_index = pro.right.begin();
+			do {
+				B_index = std::find(B_index, pro.right.end(), B.first);
+				if (B_index != pro.right.end()) {//找到了 A->xBy，需要求y的first集
+					B_index++;
+					if (B_index == pro.right.end()) {//y为空串
+						set<string> follow_set_A = result.at(nonterminals.find(pro.left)->second);
+						for (const string& symbol : follow_set_A)//插入follow(A)
+							result.at(B.second).insert(symbol);
+					}
+					else {//y不为空串，求y的first集
+						vector<string> y;
+						for (vector<string>::const_iterator i = B_index; i != pro.right.end(); i++)
+							y.push_back(*i);
+						set<string> first_set_y = get_first_set(y);
+						if (first_set_y.find("$") != first_set_y.end()) {//first集含有空串
+							first_set_y.erase("$");
+							for (const string& symbol : first_set_y)
+								result.at(B.second).insert(symbol);
+							set<string> follow_set_A = result.at(nonterminals.find(pro.left)->second);
+							for (const string& symbol : follow_set_A)//插入follow(A)
+								result.at(B.second).insert(symbol);
+						}
+						else {//不含空串，加入first集即可
+							for (const string& symbol : first_set_y)
+								result.at(B.second).insert(symbol);
+						}
+					}
+				}
+			} while (B_index != pro.right.end());//针对一个产生式出现两个相同的非终极符的情况，需要一直找下去，直到找不到
+		}
+	}
+	return result;
+}
+
+bool Table::is_different(const vector<set<string>>& lhs, const vector<set<string>>& rhs) const
+{
+	bool result = false;
+	if (lhs.size() != rhs.size())
+		result = true;
+	else {
+		size_t length = lhs.size();
+		for (size_t i = 0; i < length; i++) {
+			if (is_different(lhs.at(i), rhs.at(i))) {//任一对follow集不相同，向量整体就不相同
+				result = true;
+				break;
+			}
+		}
+	}
+	return result;
+}
+
+bool Table::is_different(const set<string>& lhs, const set<string>& rhs) const
+{
+	bool result = false;
+	if (lhs.size() != rhs.size())//两个set判断相等，只需保证大小相同的条件下，lhs的元素均在rhs中出现即可
+		result = true;
+	else {
+		for (const string& symbol : lhs) {
+			if (rhs.find(symbol) == rhs.end()) {//rhs中没找到lhs的某个元素
+				result = true;
+				break;
+			}
+		}
+	}
 	return result;
 }
 
 set<string> Table::get_predict_set(const Production& pro, const vector<set<string>>& first_sets, const vector<set<string>>& follow_sets) const
 {
-	return set<string>();
+	set<string> result;
+	set<string> first_set_right = get_first_set(pro.right);
+	if (first_set_right.find("$") == first_set_right.end()) {//右部无法推导空串，结果即为右部first集
+		result = first_set_right;
+	}
+	else {//右部可推导空串，将右部first集去除空串后加入结果，再加入左部的follow集
+		first_set_right.erase("$");
+		result = first_set_right;
+		for (const string& symbol : follow_sets.at(nonterminals.find(pro.left)->second))
+			result.insert(symbol);
+	}
+	return result;
 }
 
-bool Table::is_nonterminal(const std::string& ch) const
+bool Table::is_nonterminal(const string& symbol) const
 {
-	return nonterminals.find(ch) != nonterminals.end();
+	return nonterminals.find(symbol) != nonterminals.end();
 }
 
-bool Table::is_terminal(const std::string& ch) const
+bool Table::is_terminal(const string& symbol) const
 {
-	return terminals.find(ch) != terminals.end();
+	return terminals.find(symbol) != terminals.end();
 }
 
 size_t Table::get_first_terminal_index(const Production& pro) const
@@ -204,7 +278,7 @@ size_t Table::get_first_terminal_index(const Production& pro) const
 	return length;
 }
 
-size_t Table::get_key_index(const std::unordered_map<std::string, int>& data, const std::string& key) const
+size_t Table::get_key_index(const unordered_map<string, int>& data, const string& key) const//弃用
 {
 	size_t i = 0;
 	auto target = data.find(key);
@@ -212,7 +286,7 @@ size_t Table::get_key_index(const std::unordered_map<std::string, int>& data, co
 	return i;
 }
 
-size_t Table::get_production_index(const std::string& nonterminal, const std::string& terminal) const
+size_t Table::get_production_index(const string& nonterminal, const string& terminal) const
 {
 	return table.at(nonterminals.find(nonterminal)->second).at(terminals.find(terminal)->second);
 }
