@@ -43,13 +43,15 @@ bool Scanner::IsSeparater(char ch)
 	return (ch == ';' || ch == ',' || ch == '{' || ch == '}' || ch == '[' || ch == ']' || ch == '(' || ch == ')' || ch == '.' || ch == '\'' || ch == ':');
 }
 
-
+//char转string中间函数，不必在意
 string convert(char ch) {
 	string s = "";
 	s += ch;
 	return s;
 }
 
+
+//得到Token的类型（）
 LexType Scanner::GetTokenType(string charList)
 {
 	LexType tokenType;
@@ -113,6 +115,7 @@ LexType Scanner::GetTokenType(string charList)
 	return tokenType;
 }
 
+//保留字查找
 Word Scanner::reservedLookup(string s)
 {
 	for (int i = 0; i < 21; i++)
@@ -122,6 +125,8 @@ Word Scanner::reservedLookup(string s)
 	}
 }
 
+
+//读取源文件，获得Token，保存在TokenList里
 void Scanner::getTokenList(FILE* fpin)
 {
 	int Lineshow = 1;//确定起始行数
@@ -300,7 +305,7 @@ void Scanner::getTokenList(FILE* fpin)
 }
 
 
-
+//将LexType以string形式返回
 string Scanner::toString(int lextype) {
 	switch (lextype) {
 	case 0:return "ENDFILE";
@@ -352,9 +357,11 @@ string Scanner::toString(int lextype) {
 	}
 }
 
+
+//打印TokenList的内容
 void Scanner::printTokenList() {
 	int i = 0;
-	ofstream mycout0("tokenlist.txt");
+	ofstream mycout0("tokenlist.txt");	//输出的文件位置
 	if (!mycout0)
 	{
 		cout << "文件不能打开" << endl;
