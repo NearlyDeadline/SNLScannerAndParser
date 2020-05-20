@@ -68,6 +68,9 @@ private:
 	size_t get_key_index(const std::unordered_map<std::string, int>& data, const std::string& key) const;
 	//输入数组data和待查键值key，返回这个键值的下标，若找不到则返回data.size()
 
+	std::string get_start_symbol() const;
+	//获得文法开始符
+
 	std::vector<std::vector<int>> table;//分析表
 	std::vector<Production> productions;//保存文法所有产生式
 	std::unordered_map<std::string, int> nonterminals;//保存文法所有非终极符

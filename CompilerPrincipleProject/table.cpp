@@ -158,7 +158,7 @@ set<string> Table::get_first_set(const vector<string>& symbols) const
 vector<set<string>> Table::get_follow_sets() const
 {
 	vector<set<string>> prev(nonterminals.size(), set<string>());
-	const string start_symbol = "Program";//文法开始符，加入#
+	const string start_symbol = get_start_symbol();//文法开始符，加入#
 	prev.at(nonterminals.find(start_symbol)->second).insert("#");
 	vector<set<string>> result;
 	do {
@@ -166,6 +166,10 @@ vector<set<string>> Table::get_follow_sets() const
 		prev = iterate_follow_sets(prev);
 	} while (is_different(result, prev));//如果result和prev有任一处不同，则代表未收敛，停止判断不同，执行下一次迭代
 	return result;
+}
+
+string Table::get_start_symbol() const {
+	return "Program";
 }
 
 vector<set<string>> Table::iterate_follow_sets(const vector<set<string>>& prev) const
