@@ -19,8 +19,20 @@ void split(const string& s, vector<string>& tokens, const string& delimiters = "
 
 int main()
 {
+	/*
+	以下为LL(1)分析表示例代码：
+	！！！
+	确保项目 -> 属性 -> 生成事件 -> 生成后事件 -> 命令行中存在如下命令：
+	xcopy $(ProjectDir)productions.txt $(TargetDir)
+	否则将无法找到文法产生式文件
+	！！！
+	
+	使用如下的方式构造LL(1)分析表，参数为文法产生式文件的路径名称，这里使用相对路径。
 	Table table("productions.txt");
+	
+	使用如下的方式选择相应的文法产生式，传入的第一个参数为当前非终极符，第二个参数为当前输入符号。
 	std::cout << table("Program", "PROGRAM");
+	*/
 	return 0;
 }
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
