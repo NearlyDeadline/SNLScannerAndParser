@@ -162,12 +162,12 @@ void Scanner::getTokenList()
 				arr = arr + ch;
 				ch = fgetc(fpin);
 			}
-			if (IsKeyWord(arr))
+			if (IsKeyWord(arr))//¹Ø¼ü×Ö
 			{
 				temptoken = new Token(Lineshow,reservedLookup(arr));
 				TokenList.push_back(temptoken);
 			}
-			else
+			else//±êÊ¶·û
 			{
 				temptoken = new Token(Lineshow,Word(arr, ID));
 				TokenList.push_back(temptoken);
