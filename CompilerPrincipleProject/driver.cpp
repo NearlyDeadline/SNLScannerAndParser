@@ -121,30 +121,30 @@ void predict(int k, Stringshed& shed)
 
 }
 
-void gettoken(string& lineno, string& input,string& concrete,ifstream& tokenList)//需要修改读取文件的方式
+void gettoken(string& lineno, string& input, string& concrete, ifstream& tokenList)//需要修改读取文件的方式
 {
     //void split(const string& s, vector<string>& tokens, const string& delimiters = " ")
     string s = "";
     vector<string> vec;
-    if (input == "#")
+    if (input != "#")
+    {
+        getline(tokenList, s);
+        split(s, vec, " ");
+        input = vec[1];
+        lineno = vec[0];
+        if (vec.size() == 3)
+            concrete = vec[2];
+    }
+    else
     {
         input = "eend";
         return;
     }
-    if (tokenList.eof() != 1)
+    if (input == "ENDFILE")
     {
-        getline(tokenList, s);
-        split(s, vec," ");
-        input = vec[1];
-        lineno= vec[0];
-        if (vec.size() == 3)
-            concrete=vec[2];
+        input = "#";
     }
-    else
-    {
-        input = "#";return;
-    }
-    
+
 }
 void process1(Stringshed& shed)
 {
