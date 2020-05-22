@@ -3,6 +3,9 @@
 
 #include "table.h"
 #include "Scanner.h"
+#include "driver.h"
+#include <iostream>
+using namespace std;
 
 void split(const string& s, vector<string>& tokens, const string& delimiters = " ")
 //分割字符串，s为待分割字符串，tokens为保存分割后的字符串的向量，delimiters为分隔符
@@ -22,17 +25,25 @@ int main()
 	/*
 	以下为LL(1)分析表示例代码：
 	！！！
-	确保项目 -> 属性 -> 生成事件 -> 生成后事件 -> 命令行中存在如下命令：
-	xcopy $(ProjectDir)productions.txt $(TargetDir)
+	确保项目 -> 属性 -> 高级 -> 将内容复制到Outdir的值为是：
 	否则将无法找到文法产生式文件
 	！！！
-	
-	使用如下的方式构造LL(1)分析表，参数为文法产生式文件的路径名称，这里使用相对路径。
+	*/
+	//使用如下的方式构造LL(1)分析表，参数为文法产生式文件的路径
 	Table table("productions.txt");
 	
-	使用如下的方式选择相应的文法产生式，传入的第一个参数为当前非终极符，第二个参数为当前输入符号。
-	std::cout << table("Program", "PROGRAM");
-	*/
+	//使用如下的方式选择相应的文法产生式，传入的第一个参数为当前非终极符，第二个参数为当前输入符号。
+	//std::cout << table("Program", "PROGRAM");
+
+	//使用如下的方式构造词法分析器并计算Token，参数为SNL语言代码文件路径
+	Scanner sc("snltest.txt");
+	sc.getTokenList();
+
+	//使用如下的方式输出Token文件，参数为文件路径
+	sc.printTokenList("snltest_tokens.txt");
+
+	//使用如下的方式读取Token文件表进行语法分析，第一个参数为LL(1)分析表，第二个参数为Token文件路径
+	driver(table, "snltest_tokens.txt");
 	return 0;
 }
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
