@@ -136,7 +136,9 @@ void Scanner::getTokenList()
 		return;
 	}
 	int Lineshow = 1;//确定起始行数
-	int index = 0; //TokenList数组索引
+
+	Token* temptoken;//Tokenlist的生成节点
+
 	char ch = fgetc(fpin);
 	string arr = "";
 	while (ch != EOF) {
@@ -162,16 +164,13 @@ void Scanner::getTokenList()
 			}
 			if (IsKeyWord(arr))
 			{
-				TokenList[index].Lineshow = Lineshow;
-				TokenList[index].word = reservedLookup(arr);
-				index++;
+				temptoken = new Token(Lineshow,reservedLookup(arr));
+				TokenList.push_back(temptoken);
 			}
 			else
 			{
-				TokenList[index].Lineshow = Lineshow;
-				TokenList[index].word.Sem = arr;
-				TokenList[index].word.Lex = ID;
-				index++;
+				temptoken = new Token(Lineshow,Word(arr, ID));
+				TokenList.push_back(temptoken);
 			}
 		}
 
@@ -179,10 +178,8 @@ void Scanner::getTokenList()
 		else if (IsOperator(ch))
 		{
 			LexType Lex = GetTokenType(convert(ch));
-			TokenList[index].Lineshow = Lineshow;
-			TokenList[index].word.Sem = ch;
-			TokenList[index].word.Lex = Lex;
-			index++;
+			temptoken = new Token(Lineshow, Word(convert(ch), Lex));
+			TokenList.push_back(temptoken);
 			ch = fgetc(fpin);
 		}
 
@@ -209,31 +206,26 @@ void Scanner::getTokenList()
 				{
 
 					arr += ch;
-					TokenList[index].Lineshow = Lineshow;
-					TokenList[index].word.Sem = arr;
-					TokenList[index].word.Lex = GetTokenType(arr);
-					index++;
+					temptoken = new Token(Lineshow, Word(arr, GetTokenType(arr)));
+					TokenList.push_back(temptoken);
 					ch = fgetc(fpin);
 				}
 				else
 				{
-					TokenList[index].Lineshow = Lineshow;
-					TokenList[index].word.Sem = arr;
-					TokenList[index].word.Lex = GetTokenType(arr);
-					index++;
+					temptoken = new Token(Lineshow, Word(arr, GetTokenType(arr)));
+					TokenList.push_back(temptoken);
 				}
 			}
 			//判断字符串
 			else if (ch == '\'')
 			{
-				TokenList[index].Lineshow = Lineshow;
-				TokenList[index].word.Lex = GetTokenType(convert(ch));
+				char tempchar = ch;
 				while ((ch = fgetc(fpin)) != '\'')
 				{
 					arr += ch;
 				}
-				TokenList[index].word.Sem = arr;
-				index++;
+				temptoken = new Token(Lineshow, Word(arr, GetTokenType(convert(tempchar))));
+				TokenList.push_back(temptoken);
 				ch = fgetc(fpin);
 			}
 			//判断双字符分解符
@@ -243,26 +235,20 @@ void Scanner::getTokenList()
 				if ((ch = fgetc(fpin)) == '=')
 				{
 					arr += ch;
-					TokenList[index].Lineshow = Lineshow;
-					TokenList[index].word.Sem = arr;
-					TokenList[index].word.Lex = GetTokenType(arr);
-					index++;
+					temptoken = new Token(Lineshow, Word(arr, GetTokenType(arr)));
+					TokenList.push_back(temptoken);
 					ch = fgetc(fpin);
 				}
 				else
 				{
-					TokenList[index].Lineshow = Lineshow;
-					TokenList[index].word.Sem = arr;
-					TokenList[index].word.Lex = GetTokenType(arr);
-					index++;
+					temptoken = new Token(Lineshow, Word(arr, GetTokenType(arr)));
+					TokenList.push_back(temptoken);
 				}
 			}
 			else
 			{
-				TokenList[index].Lineshow = Lineshow;
-				TokenList[index].word.Sem = convert(ch);
-				TokenList[index].word.Lex = GetTokenType(convert(ch));
-				index++;
+				temptoken = new Token(Lineshow, Word(convert(ch), GetTokenType(convert(ch))));
+				TokenList.push_back(temptoken);
 				ch = fgetc(fpin);
 			}
 		}
@@ -284,30 +270,27 @@ void Scanner::getTokenList()
 				count++;
 				if (IsLetter(arr[i]))
 				{
-					TokenList[index].word.Lex = ERROR;
+					temptoken = new Token(Lineshow, Word(arr, ERROR));
+					TokenList.push_back(temptoken);
 					break;
 				}
 			}
-			TokenList[index].Lineshow = Lineshow;
-			TokenList[index].word.Sem = arr;
-			if (count == arr.length())
-				TokenList[index].word.Lex = INTC;
-			index++;
+			if (count == arr.length()) {
+				temptoken = new Token(Lineshow, Word(arr, INTC));
+				TokenList.push_back(temptoken);
+			}
 		}
 
 		//未知符号
 		else
 		{
-			TokenList[index].Lineshow = Lineshow;
-			TokenList[index].word.Sem = ch;
-			TokenList[index].word.Lex = GetTokenType(convert(ch));
-			index++;
+			temptoken = new Token(Lineshow, Word(convert(ch), GetTokenType(convert(ch))));
+			TokenList.push_back(temptoken);
 			ch = fgetc(fpin);
 		}
 	}
-	TokenList[index].Lineshow = Lineshow;
-	TokenList[index].word.Sem = ch;
-	TokenList[index].word.Lex = ENDFILE;
+	temptoken = new Token(Lineshow, Word(convert(ch), ENDFILE));
+	TokenList.push_back(temptoken);
 }
 
 
@@ -364,7 +347,7 @@ string Scanner::toString(int lextype) {
 }
 
 
-//打印TokenList的内容
+//打印TokenList的内容，最后有空格行！！
 void Scanner::printTokenList(const string& tokenListFile) {
 	int i = 0;
 	ofstream mycout0(tokenListFile);	//输出的文件位置
@@ -373,11 +356,11 @@ void Scanner::printTokenList(const string& tokenListFile) {
 		cout << "文件不能打开" << endl;
 		return;
 	}
-	while (TokenList[i].word.Lex != ENDFILE)
+	while (TokenList.at(i)->word.Lex != ENDFILE)
 	{
-		mycout0 << setw(4) << std::left << TokenList[i].Lineshow << std::left << setw(25) << toString(TokenList[i].word.Lex) << TokenList[i].word.Sem << endl;
+		mycout0 << setw(4) << std::left << TokenList.at(i)->Lineshow << std::left << setw(25) << toString(TokenList.at(i)->word.Lex) << TokenList.at(i)->word.Sem << endl;
 		i++;
 	}
-	mycout0 << TokenList[i].Lineshow << " " << toString(TokenList[i].word.Lex) << " " << TokenList[i].word.Sem << endl;
+	mycout0 << TokenList.at(i)->Lineshow << " " << toString(TokenList.at(i)->word.Lex) << " " << TokenList.at(i)->word.Sem << endl;
 	mycout0.close();
 }
