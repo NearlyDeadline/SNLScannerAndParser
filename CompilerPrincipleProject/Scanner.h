@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include<string>
 #include<fstream> 
-#define BUFLEN 256
+#include<vector>
 
 using namespace std;
 typedef enum
@@ -26,6 +26,11 @@ typedef enum
 static struct Word {
 	string Sem;   //语义信息
 	LexType Lex; //词法信息
+	Word(string sem, LexType lex) {
+		Sem = sem;
+		Lex = lex;
+	}
+	Word(){}
 }reservedWords[21] = { {"program",PROGRAM},{"type",TYPE},{"var",VAR},
 	{"procedure",PROCEDURE},{"begin",BEGIN},{"end",END1},{"array",ARRAY},
 	{"of",OF},{"record",RECORD},{"if",IF},{"then",THEN},{"else",ELSE},{"fi",FI},
@@ -37,15 +42,13 @@ static struct Word {
 struct Token {			//token的结构
 	int Lineshow;
 	struct Word word;
+	Token(int lineshow, struct Word w) {
+		Lineshow = lineshow;
+		word = w;
+	}
+	Token(){}
 };
 
-
-typedef struct node			//tokenList的节点
-{
-	Token Token;      //单词
-	struct node* nextToken; //指向下一个单词的指针
-	struct node* preToken;
-} ListNode;
 
 typedef enum				//状态的类型
 {
@@ -69,15 +72,12 @@ public:
 
 	bool IsDigit(char ch);
 
-	Token TokenList[10000];
+	vector<Token*> TokenList;//TokenList的结构
+
 	LexType GetTokenType(string charList);
 	string toString(int lextype);
-	//void Init();
 	void getTokenList();
-	//void ungetNextChar();
-	//int getNextChar();
 	Word reservedLookup(string s);
-	//void ChainToFile(ListNode * filehead);
 	void printTokenList(const string& tokenListFile);
 	string codeFile;
 };

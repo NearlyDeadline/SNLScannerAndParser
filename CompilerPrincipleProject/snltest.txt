@@ -6,4 +6,4 @@ begin
     read( v1 );
     v1 := v1 + 10;
     write( v1 )
-end
+end.
