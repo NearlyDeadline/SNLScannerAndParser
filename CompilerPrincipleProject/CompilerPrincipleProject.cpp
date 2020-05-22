@@ -3,8 +3,11 @@
 
 #include "table.h"
 #include "Scanner.h"
+#include "driver.h"
+#include <iostream>
+using namespace std;
 
-void split(const string& s, vector<string>& tokens, const string& delimiters = " ")
+void split(const string& s, vector<string>& tokens, const string& delimiters)
 //分割字符串，s为待分割字符串，tokens为保存分割后的字符串的向量，delimiters为分隔符
 {
 	tokens.clear();
@@ -27,12 +30,12 @@ int main()
 	否则将无法找到文法产生式文件
 	！！！
 	
-	使用如下的方式构造LL(1)分析表，参数为文法产生式文件的路径名称，这里使用相对路径。
+	使用如下的方式构造LL(1)分析表，参数为文法产生式文件的路径名称，这里使用相对路径。*/
 	Table table("productions.txt");
 	
-	使用如下的方式选择相应的文法产生式，传入的第一个参数为当前非终极符，第二个参数为当前输入符号。
+	//使用如下的方式选择相应的文法产生式，传入的第一个参数为当前非终极符，第二个参数为当前输入符号。
 	std::cout << table("Program", "PROGRAM");
-	*/
+	driver();
 	return 0;
 }
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
