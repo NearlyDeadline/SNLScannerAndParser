@@ -24,6 +24,9 @@
     <ClCompile Include="Scanner.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="driver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="table.h">
@@ -32,9 +35,15 @@
     <ClInclude Include="Scanner.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="driver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="productions.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="snltest.txt">
       <Filter>资源文件</Filter>
     </Text>
   </ItemGroup>

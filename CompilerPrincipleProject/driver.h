@@ -42,12 +42,12 @@ public:
     }
 };
 
-void split(const string& s, vector<string>& tokens, const string& delimiters = " ");
+extern void split(const string& s, vector<string>& tokens, const string& delimiters);
+void driver(const Table& table, const string& tokenListFile);
 void gettoken(string&, string& s,string &concrete, ifstream& tokenList);//还有一个文件
-Table CreatTable();//生成LL1语法分析表
 int isVT(string s);
 int isVN(string s);
-void pridict(int pnum, Stringshed& shed);
+void predict(int pnum, Stringshed& shed);
 void process1(Stringshed& shed);
 void process2(Stringshed& shed);
 void process3(Stringshed& shed);

@@ -1,12 +1,16 @@
 #include "driver.h"
 
-void driver()
+void driver(const Table& table, const string& tokenListFile)
 {
-    Table table = CreatTable();//生成语法分析表
+
     Stringshed anashed;//生成一个语法分析栈
     anashed.push("#");
     anashed.push("Program");
-    ifstream  tokenList("F:\\编译原理课设\\CompilerPrincipleProject\\correct_tokenlist.txt");//此处打开张磊的TokenList
+    ifstream tokenList(tokenListFile);//此处打开张磊的TokenList
+    if (!tokenList.is_open()) {
+        cout << "打开TokenList文件失败" << endl;
+        return;
+    }
     string input = "";
     string lineno = "";
     string concrete = "";
@@ -20,7 +24,7 @@ void driver()
             int pnum = table.get_production_index(anashed.gethead(), input);
             if (pnum != 0)
             {
-                pridict(pnum, anashed);
+                predict(pnum, anashed);
                 cout << countt << "使用产生式" << pnum << endl;countt++;
             }
             else
@@ -55,12 +59,6 @@ void driver()
     tokenList.close();
 }
 
-Table CreatTable()
-{
-    Table table("F:\\编译原理课设\\CompilerPrincipleProject\\productions.txt");
-    return table;
-
-}
 int isVN(string s)
 {
     if (s == "Program"     ||s == "ProgramHead"   ||s == "ProgramName"  ||s == "DeclarePart"     ||s == "TypeDecpart"||
@@ -97,7 +95,7 @@ int isVT(string s)
     else
         return 0;
 }
-void pridict(int k, Stringshed& shed)
+void predict(int k, Stringshed& shed)
 {
     if (k == 1)process1(shed);if (k == 2)process2(shed);if (k == 3)process3(shed);if (k == 4)process4(shed);if (k == 5)process5(shed);
     if (k == 6)process6(shed);if (k == 7)process7(shed);if (k == 8)process8(shed);if (k == 9)process9(shed);if (k == 10)process10(shed);

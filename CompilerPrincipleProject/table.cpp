@@ -10,7 +10,7 @@ using std::unordered_map;
 using std::getline;
 using std::set;
 
-extern void split(const string& s, vector<string>& tokens, const string& delimiters = " ");
+extern void split(const string& s, vector<string>& tokens, const string& delimiters);
 
 Table::Table(const string& filepath)
 {

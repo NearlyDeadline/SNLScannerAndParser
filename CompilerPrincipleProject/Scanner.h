@@ -54,8 +54,8 @@ typedef enum				//×´Ì¬µÄÀàÐÍ
 
 class Scanner {
 public:
-	Scanner() {
-		//Init();
+	Scanner(const string& codeFile) {
+		this->codeFile = codeFile;
 	}
 	bool IsSeparater(char ch);
 
@@ -73,10 +73,11 @@ public:
 	LexType GetTokenType(string charList);
 	string toString(int lextype);
 	//void Init();
-	void getTokenList(FILE* fpin);
+	void getTokenList();
 	//void ungetNextChar();
 	//int getNextChar();
 	Word reservedLookup(string s);
 	//void ChainToFile(ListNode * filehead);
-	void printTokenList();
+	void printTokenList(const string& tokenListFile);
+	string codeFile;
 };

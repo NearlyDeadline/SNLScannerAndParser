@@ -127,8 +127,14 @@ Word Scanner::reservedLookup(string s)
 
 
 //读取源文件，获得Token，保存在TokenList里
-void Scanner::getTokenList(FILE* fpin)
+void Scanner::getTokenList()
 {
+	FILE* fpin = nullptr;
+	auto er = fopen_s(&fpin, this->codeFile.c_str(), "r");
+	if (er != 0) {
+		cout << "源代码文件无法打开" << endl;
+		return;
+	}
 	int Lineshow = 1;//确定起始行数
 	int index = 0; //TokenList数组索引
 	char ch = fgetc(fpin);
@@ -359,21 +365,19 @@ string Scanner::toString(int lextype) {
 
 
 //打印TokenList的内容
-void Scanner::printTokenList() {
+void Scanner::printTokenList(const string& tokenListFile) {
 	int i = 0;
-	ofstream mycout0("tokenlist.txt");	//输出的文件位置
+	ofstream mycout0(tokenListFile);	//输出的文件位置
 	if (!mycout0)
 	{
 		cout << "文件不能打开" << endl;
-		exit(0);
+		return;
 	}
 	while (TokenList[i].word.Lex != ENDFILE)
 	{
 		mycout0 << setw(4) << std::left << TokenList[i].Lineshow << std::left << setw(25) << toString(TokenList[i].word.Lex) << TokenList[i].word.Sem << endl;
-		//printToken();
 		i++;
 	}
-	//printToken(tokenList[i]);
 	mycout0 << TokenList[i].Lineshow << " " << toString(TokenList[i].word.Lex) << " " << TokenList[i].word.Sem << endl;
 	mycout0.close();
 }
