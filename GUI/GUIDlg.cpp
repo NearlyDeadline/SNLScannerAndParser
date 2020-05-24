@@ -8,6 +8,7 @@
 #include "GUIDlg.h"
 #include "afxdialogex.h"
 #include <string>
+#include <fstream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -60,11 +61,6 @@ BOOL CGUIDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	/*
-	以下代码用来处理string和CString的互相转化：
-	std::string test = "测试文本\r\n测试文本";
-	CString cstrtest(test.data())
-	*/
 	INIT_VALUE_EDIT_SCANNER_RESULT = "在此处显示词法分析结果——Token序列";
 	INIT_VALUE_EDIT_PARSER_RESULT = "在此处显示语法分析结果——调用产生式\r\n进行推导的过程";
 	m_EDIT_SCANNER_RESULT.SetWindowTextW(INIT_VALUE_EDIT_SCANNER_RESULT);
@@ -157,16 +153,24 @@ void CGUIDlg::OnBnClickedButtonBeginParser()//开始语法分析按钮
 void CGUIDlg::OnBnClickedButtonBeginScanner()//开始词法分析按钮
 {
 	if (!snl_filepath.IsEmpty()) {
-		delete scanner;
+		if (scanner != nullptr)
+			delete scanner;
 		scanner = new Scanner(std::string(CW2A(snl_filepath.GetString())));
 		std::string token_path = CW2A(snl_folderpath.GetString());
 		token_path += snl_filetitle + "_token.txt";
 		scanner->getTokenList();
 		scanner->printTokenList(token_path);
-		/*
-		TODO:在此添加读取token信息的函数，将其显示在窗口上
-		*/
-		scan_finished = true;
+		std::ifstream tokenfile(token_path);
+		if (tokenfile.is_open()) {
+			CString showline;
+			std::string showstring;
+			while (std::getline(tokenfile, showstring, '\n')) {
+				showline += showstring.data();//使用data函数完成string到CString的转化
+				showline += "\r\n";
+			}
+			m_EDIT_SCANNER_RESULT.SetWindowTextW(showline);
+			scan_finished = true;
+		}
 	}
 	else {
 		m_EDIT_SCANNER_RESULT.SetWindowTextW(_T("尚未选择SNL代码文件！"));

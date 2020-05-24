@@ -358,7 +358,7 @@ void Scanner::printTokenList(const string& tokenListFile) {
 	}
 	while (TokenList.at(i)->word.Lex != ENDFILE)
 	{
-		mycout0 << setw(4) << std::left << TokenList.at(i)->Lineshow << std::left << setw(25) << toString(TokenList.at(i)->word.Lex) << TokenList.at(i)->word.Sem << endl;
+		mycout0 << setw(4) << std::left << TokenList.at(i)->Lineshow << std::left << setw(18) << toString(TokenList.at(i)->word.Lex) << TokenList.at(i)->word.Sem << endl;
 		i++;
 	}
 	mycout0 << TokenList.at(i)->Lineshow << " " << toString(TokenList.at(i)->word.Lex) << " " << TokenList.at(i)->word.Sem << endl;
