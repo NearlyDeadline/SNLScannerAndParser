@@ -10,7 +10,7 @@
 using namespace std;
 typedef enum
 {
-	ENDFILE, ERROR,
+	ENDFILE, ERRORR,
 	PROGRAM, PROCEDURE, TYPE, VAR, IF,
 	THEN, ELSE, FI, WHILE, DO, ENDWH,
 	BEGIN, END1, READ, WRITE, ARRAY, OF,

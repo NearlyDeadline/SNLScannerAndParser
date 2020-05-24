@@ -7,6 +7,7 @@
 #include "GUI.h"
 #include "GUIDlg.h"
 #include "afxdialogex.h"
+#include <string>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -24,6 +25,8 @@ CGUIDlg::CGUIDlg(CWnd* pParent /*=nullptr*/)
 	snl_filepath = _T("");
 	INIT_VALUE_EDIT_SCANNER_RESULT = _T("");
 	INIT_VALUE_EDIT_PARSER_RESULT = _T("");
+	snl_filetitle = _T("");
+	snl_folderpath = _T("");
 }
 
 void CGUIDlg::DoDataExchange(CDataExchange* pDX)
@@ -66,6 +69,9 @@ BOOL CGUIDlg::OnInitDialog()
 	INIT_VALUE_EDIT_PARSER_RESULT = "在此处显示语法分析结果——调用产生式\r\n进行推导的过程";
 	m_EDIT_SCANNER_RESULT.SetWindowTextW(INIT_VALUE_EDIT_SCANNER_RESULT);
 	m_EDIT_PARSER_RESULT.SetWindowTextW(INIT_VALUE_EDIT_PARSER_RESULT);
+	table = new Table("../CompilerPrincipleProject/productions.txt");
+	scanner = nullptr;
+	scan_finished = false;
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -112,32 +118,59 @@ void CGUIDlg::OnBnClickedButtonChooseFilepath()
 	CFileDialog dlg(TRUE/*这个参数为TRUE就是“打开”对话框，为FALSE就是“保存”对话框*/, NULL/*默认文件类型*/, NULL/*默认文件名*/, OFN_HIDEREADONLY/*样式，这里设置为“隐藏只读”*/, _T("所有文件(*.*)|*.*||")/*文件类型列表*/, NULL, NULL, FALSE/*指定文件打开对话框是否为Vista样式*/);
 	if (dlg.DoModal() == IDOK)//如果用户在文件对话框中点击了“确定”按钮
 	{
-		snl_filepath = dlg.GetPathName();//获取文件路径到strPathName
+		snl_filepath = dlg.GetPathName();//获取文件路径到snl_filepath
+		auto idx = snl_filepath.ReverseFind('\\');
+		snl_folderpath = snl_filepath.Mid(0, idx + 1);//+1取到反斜杠，不加1不取，获取文件夹路径到snl_folderpath
+		snl_filetitle = dlg.GetFileTitle();//获取文件名到snl_filename
 		m_EDIT_FILEPATH.SetWindowText(snl_filepath);//显示文件路径到编辑框
 		m_EDIT_SCANNER_RESULT.SetWindowTextW(INIT_VALUE_EDIT_SCANNER_RESULT);
 		m_EDIT_PARSER_RESULT.SetWindowTextW(INIT_VALUE_EDIT_PARSER_RESULT);
-//		auto idx = strPathName.ReverseFind('\\');
-//		CString strFolderName = strPathName.Mid(0, idx + 1);//+1取到反斜杠，不加1不取
-//		std::string path = CW2A(strFolderName.GetString());
+		scan_finished = false;
 	}
 }
 
 
 void CGUIDlg::OnBnClickedOk()
 {
+	if (table != nullptr)
+	    delete table;
+	if (scanner != nullptr)
+		delete scanner;
 	CDialogEx::OnOK();
 }
 
 
-void CGUIDlg::OnBnClickedButtonBeginParser()
+void CGUIDlg::OnBnClickedButtonBeginParser()//开始语法分析按钮
 {
-	// TODO: 在此添加控件通知处理程序代码
+	if (scan_finished) {//如果词法分析已完成，则可以开始语法分析
+		m_EDIT_PARSER_RESULT.SetWindowTextW(_T("开始语法分析"));
+		/*
+		TODO:在此添加语法分析过程函数，显示在窗口上
+		*/
+	}
+	else {
+		m_EDIT_PARSER_RESULT.SetWindowTextW(_T("请先完成词法分析！"));
+	}
 }
 
 
-void CGUIDlg::OnBnClickedButtonBeginScanner()
+void CGUIDlg::OnBnClickedButtonBeginScanner()//开始词法分析按钮
 {
-	// TODO: 在此添加控件通知处理程序代码
+	if (!snl_filepath.IsEmpty()) {
+		delete scanner;
+		scanner = new Scanner(std::string(CW2A(snl_filepath.GetString())));
+		std::string token_path = CW2A(snl_folderpath.GetString());
+		token_path += snl_filetitle + "_token.txt";
+		scanner->getTokenList();
+		scanner->printTokenList(token_path);
+		/*
+		TODO:在此添加读取token信息的函数，将其显示在窗口上
+		*/
+		scan_finished = true;
+	}
+	else {
+		m_EDIT_SCANNER_RESULT.SetWindowTextW(_T("尚未选择SNL代码文件！"));
+	}
 }
 
 

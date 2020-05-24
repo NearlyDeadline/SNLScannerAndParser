@@ -54,7 +54,7 @@ BOOL CGUIApp::InitInstance()
 	// 更改用于存储设置的注册表项
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
-	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
+	SetRegistryKey(_T("吉林大学计算机科学与技术学院2117-25-04小组"));
 
 	CGUIDlg dlg;
 	m_pMainWnd = &dlg;
