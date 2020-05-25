@@ -162,12 +162,12 @@ void Scanner::getTokenList()
 				arr = arr + ch;
 				ch = fgetc(fpin);
 			}
-			if (IsKeyWord(arr))
+			if (IsKeyWord(arr))//关键字
 			{
 				temptoken = new Token(Lineshow,reservedLookup(arr));
 				TokenList.push_back(temptoken);
 			}
-			else
+			else//标识符
 			{
 				temptoken = new Token(Lineshow,Word(arr, ID));
 				TokenList.push_back(temptoken);
@@ -348,19 +348,29 @@ string Scanner::toString(int lextype) {
 
 
 //打印TokenList的内容，最后有空格行！！
-void Scanner::printTokenList(const string& tokenListFile) {
+void Scanner::printTokenList(const string& correcttokenListFile, const string& AlltokenListFile) {
 	int i = 0;
-	ofstream mycout0(tokenListFile);	//输出的文件位置
-	if (!mycout0)
+	ofstream mycout0(correcttokenListFile);	//输出正确TokenList的文件位置（后续文法分析所用）
+	ofstream mycout1(AlltokenListFile);	//输出全部TokenList的文件位置
+	if (!mycout0||!mycout1)
 	{
 		cout << "文件不能打开" << endl;
 		return;
 	}
 	while (TokenList.at(i)->word.Lex != ENDFILE)
 	{
+		if (TokenList.at(i)->word.Lex == ERRORR) {
+			mycout1<< std::left << "第 "<<TokenList.at(i)->Lineshow<<" 行  " << std::left << setw(18) << TokenList.at(i)->word.Sem+"  字符有误" << endl;
+			i++;
+			continue;
+		}
 		mycout0 << setw(4) << std::left << TokenList.at(i)->Lineshow << std::left << setw(18) << toString(TokenList.at(i)->word.Lex) << TokenList.at(i)->word.Sem << endl;
+		mycout1 << setw(4) << std::left << TokenList.at(i)->Lineshow << std::left << setw(18) << toString(TokenList.at(i)->word.Lex) << TokenList.at(i)->word.Sem << endl;
 		i++;
 	}
 	mycout0 << TokenList.at(i)->Lineshow << " " << toString(TokenList.at(i)->word.Lex) << " " << TokenList.at(i)->word.Sem << endl;
+	mycout1 << TokenList.at(i)->Lineshow << " " << toString(TokenList.at(i)->word.Lex) << " " << TokenList.at(i)->word.Sem << endl;
+
 	mycout0.close();
+	mycout1.close();
 }

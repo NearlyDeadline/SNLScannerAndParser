@@ -142,7 +142,7 @@ void CGUIDlg::OnBnClickedButtonBeginParser()//开始语法分析按钮
 	if (scan_finished) {//如果词法分析已完成，则可以开始语法分析
 		CString showline("开始语法分析\r\n");
 		m_EDIT_PARSER_RESULT.SetWindowTextW(showline);
-		vector<string> parser_linetext = driver(*table, tokenfilepath);
+		vector<string> parser_linetext = driver(*table, correcttokenfilepath);
 		for (const string& showstring: parser_linetext) {
 			showline += showstring.data();
 			showline += "\r\n";
@@ -162,11 +162,15 @@ void CGUIDlg::OnBnClickedButtonBeginScanner()//开始词法分析按钮
 		if (scanner != nullptr)
 			delete scanner;
 		scanner = new Scanner(std::string(CW2A(snl_filepath.GetString())));
-		tokenfilepath = CW2A(snl_folderpath.GetString());
-		tokenfilepath += snl_filetitle + "_token.txt";
+		string tokenfilepath = CW2A(snl_folderpath.GetString());
+
+		correcttokenfilepath += snl_filetitle + "_correcttoken.txt";
+		alltokenfilepath += snl_filetitle + "_alltoken.txt";
+
+		//tokenfilepath += snl_filetitle + "_correcttoken.txt";
 		scanner->getTokenList();
-		scanner->printTokenList(tokenfilepath);
-		std::ifstream tokenfile(tokenfilepath);
+		scanner->printTokenList(correcttokenfilepath, alltokenfilepath);
+		std::ifstream tokenfile(alltokenfilepath);
 		if (tokenfile.is_open()) {
 			CString showline;
 			std::string showstring;
