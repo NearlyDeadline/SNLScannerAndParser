@@ -43,7 +43,7 @@ public:
 };
 
 extern void split(const string& s, vector<string>& tokens, const string& delimiters);
-void driver(const Table& table, const string& tokenListFile);
+vector<string> driver(const Table& table, const string& tokenListFile);
 void gettoken(string&, string& s,string &concrete, ifstream& tokenList);//还有一个文件
 int isVT(string s);
 int isVN(string s);

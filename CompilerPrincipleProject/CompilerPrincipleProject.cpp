@@ -23,14 +23,14 @@ int main()
 	//std::cout << table("Program", "PROGRAM");
 
 	//使用如下的方式构造词法分析器并计算Token，参数为SNL语言代码文件路径
-	Scanner sc("snltest.txt");
+	Scanner sc("E:\\Temp\\snltest_easy.txt");
 	sc.getTokenList();
 
 	//使用如下的方式输出Token文件，参数为文件路径
-	sc.printTokenList("snltest_tokens.txt");
+	sc.printTokenList("E:\\Temp\\snltest_easy_tokens.txt");
 
 	//使用如下的方式读取Token文件表进行语法分析，第一个参数为LL(1)分析表，第二个参数为Token文件路径
-	driver(table, "snltest_tokens.txt");
+	driver(table, "E:\\Temp\\snltest_easy_tokens.txt");
 	return 0;
 }
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

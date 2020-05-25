@@ -9,6 +9,7 @@
 #include "afxdialogex.h"
 #include <string>
 #include <fstream>
+#include "../CompilerPrincipleProject/driver.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -139,10 +140,15 @@ void CGUIDlg::OnBnClickedOk()
 void CGUIDlg::OnBnClickedButtonBeginParser()//开始语法分析按钮
 {
 	if (scan_finished) {//如果词法分析已完成，则可以开始语法分析
-		m_EDIT_PARSER_RESULT.SetWindowTextW(_T("开始语法分析"));
-		/*
-		TODO:在此添加语法分析过程函数，显示在窗口上
-		*/
+		CString showline("开始语法分析\r\n");
+		m_EDIT_PARSER_RESULT.SetWindowTextW(showline);
+		vector<string> parser_linetext = driver(*table, tokenfilepath);
+		for (const string& showstring: parser_linetext) {
+			showline += showstring.data();
+			showline += "\r\n";
+		}
+		showline += "语法分析完成";
+		m_EDIT_PARSER_RESULT.SetWindowTextW(showline);
 	}
 	else {
 		m_EDIT_PARSER_RESULT.SetWindowTextW(_T("请先完成词法分析！"));
@@ -156,11 +162,11 @@ void CGUIDlg::OnBnClickedButtonBeginScanner()//开始词法分析按钮
 		if (scanner != nullptr)
 			delete scanner;
 		scanner = new Scanner(std::string(CW2A(snl_filepath.GetString())));
-		std::string token_path = CW2A(snl_folderpath.GetString());
-		token_path += snl_filetitle + "_token.txt";
+		tokenfilepath = CW2A(snl_folderpath.GetString());
+		tokenfilepath += snl_filetitle + "_token.txt";
 		scanner->getTokenList();
-		scanner->printTokenList(token_path);
-		std::ifstream tokenfile(token_path);
+		scanner->printTokenList(tokenfilepath);
+		std::ifstream tokenfile(tokenfilepath);
 		if (tokenfile.is_open()) {
 			CString showline;
 			std::string showstring;

@@ -51,4 +51,5 @@ private:
 	CString snl_filetitle;//SNL代码文件名，不含扩展名，例：snltest
 	CString snl_folderpath;//SNL代码文件夹路径，最后有一个反斜杠，例：E:\\
 	//如果本行下面没有其他代码，不要删除本行注释，否则程序会报错
+	std::string tokenfilepath;//token文件路径，包含路径和文件名和扩展名
 };

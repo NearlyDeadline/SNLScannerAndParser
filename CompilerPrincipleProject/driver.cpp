@@ -1,15 +1,15 @@
 #include "driver.h"
 
-void driver(const Table& table, const string& tokenListFile)
+vector<string> driver(const Table& table, const string& tokenListFile)
 {
-
+    vector<string> result;
     Stringshed anashed;//生成一个语法分析栈
     anashed.push("#");
     anashed.push("Program");
     ifstream tokenList(tokenListFile);//此处打开张磊的TokenList
     if (!tokenList.is_open()) {
-        cout << "打开TokenList文件失败" << endl;
-        return;
+        result.push_back("打开TokenList文件失败");
+        return result;
     }
     string input = "";
     string lineno = "";
@@ -19,21 +19,22 @@ void driver(const Table& table, const string& tokenListFile)
     int countt = 1;
     while (con == 1 && anashed.shedpoint != -1)//无错误产生且分析栈栈非空
     {
-        if (isVN(anashed.gethead()) == 1)//非终结符
+        if (isVN(anashed.gethead()) == 1/*table.is_nonterminal(anashed.gethead())*/)//非终结符
         {
             int pnum = table.get_production_index(anashed.gethead(), input);
             if (pnum != 0)
             {
                 predict(pnum, anashed);
-                cout << countt << "使用产生式" << pnum << endl;countt++;
+                result.push_back(countt + "使用产生式" + pnum);
+                countt++;
             }
             else
             {
                 con = 0;
-                cout << "there exsit a error in line:" << lineno << ",concrete:"<<concrete<<",cause:no matchable produce exp" << endl;
+                result.push_back("there exists a error in line:" + lineno + ", concrete:" + concrete + ",cause:no matchable produce exp");
             }
         }
-        else if (isVT(anashed.gethead()))//终结符
+        else if (isVT(anashed.gethead())/*table.is_terminal(anashed.gethead())*/)//终结符
         {
             if (anashed.gethead() == input)
             {
@@ -43,18 +44,18 @@ void driver(const Table& table, const string& tokenListFile)
             else
             {
                 con = 0;
-                cout << "there exsit a error in line:" << lineno << ",concrete:" << concrete << ",cause:fail to match VT" << endl;
+                result.push_back("there exists a error in line:" + lineno + ", concrete:" + concrete + ",cause:fail to match VT");
             }
         }
 
     }
     if (anashed.shedpoint == -1 && input == "eend")
     {
-        cout << "legal sentence!" << endl;
+        result.push_back("legal sentence!");
     }
     else
     {
-        cout << "error:there exists shed that was not empty!" << endl;
+        result.push_back("error:there exists shed that was not empty!");
     }
     tokenList.close();
 }
