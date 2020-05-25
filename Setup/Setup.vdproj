@@ -147,6 +147,17 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_4F4C7F37624F4FA0B8397384538DE5F4"
+                    {
+                    "Name" = "8:SNL语言词法/语法分析器"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_A9F7A4FBB02542D7BAC047C312C95152"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_C278EF8368B74C82A5B47617D2D00A83"
@@ -175,25 +186,25 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Setup"
+        "ProductName" = "8:SNL Scanner Parser"
         "ProductCode" = "8:{2959278C-E6B6-4087-B287-5B1883F3F3EA}"
-        "PackageCode" = "8:{06E76C4B-1AF0-43CA-AE22-10042889B75A}"
+        "PackageCode" = "8:{51DB5F01-6A52-49F8-9A45-24B29B4FBD7A}"
         "UpgradeCode" = "8:{974D82C1-F406-4E64-91F8-F157D90CF167}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:mike"
+        "Manufacturer" = "8:吉林大学计算机科学与技术学院21172504小组"
         "ARPHELPTELEPHONE" = "8:"
-        "ARPHELPLINK" = "8:"
+        "ARPHELPLINK" = "8:https://github.com/NearlyDeadline/SNLScannerAndParser"
         "Title" = "8:Setup"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:mike"
+        "ARPCONTACT" = "8:21172504小组"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
-        "ARPURLINFOABOUT" = "8:"
+        "ARPURLINFOABOUT" = "8:https://github.com/NearlyDeadline/SNLScannerAndParser"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
@@ -299,7 +310,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_10E2613C2AA8464AB8E9B703B8613CDD"
             {
-            "Name" = "8:运行程序"
+            "Name" = "8:SNL语言词法/语法分析器"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -320,7 +331,7 @@
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
             "Target" = "8:_9DC3C1D78A504E1F9BA36DBAE40559A1"
-            "Folder" = "8:_560CC1B541BA4B8486BAB73776E69AAB"
+            "Folder" = "8:_4F4C7F37624F4FA0B8397384538DE5F4"
             "WorkingFolder" = "8:_2E5003435A0A41C5A5FD0FD493F05FA7"
             "Icon" = "8:"
             "Feature" = "8:"
@@ -348,7 +359,7 @@
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
             "Target" = "8:_B87EA5F49F62433E91971654FE49B0F7"
-            "Folder" = "8:_560CC1B541BA4B8486BAB73776E69AAB"
+            "Folder" = "8:_4F4C7F37624F4FA0B8397384538DE5F4"
             "WorkingFolder" = "8:_2E5003435A0A41C5A5FD0FD493F05FA7"
             "Icon" = "8:"
             "Feature" = "8:"
