@@ -73,6 +73,6 @@ public:
 	string toString(int lextype);
 	void getTokenList();
 	Word reservedLookup(string s);
-	void printTokenList(const string& tokenListFile);
+	void printTokenList(const string& correcttokenListFile, const string& AlltokenListFile);
 	string codeFile;
 };
