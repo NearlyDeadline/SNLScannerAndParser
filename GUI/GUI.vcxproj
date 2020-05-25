@@ -218,11 +218,6 @@
     <Image Include="res\GUI.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CompilerPrincipleProject\CompilerPrincipleProject.vcxproj">
-      <Project>{e94918f6-c5a7-4f6c-b8a8-f630478aab03}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="..\CompilerPrincipleProject\productions.txt">
       <DeploymentContent>true</DeploymentContent>
     </Text>

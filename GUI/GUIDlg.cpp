@@ -66,7 +66,7 @@ BOOL CGUIDlg::OnInitDialog()
 	INIT_VALUE_EDIT_PARSER_RESULT = "在此处显示语法分析结果——调用产生式\r\n进行推导的过程";
 	m_EDIT_SCANNER_RESULT.SetWindowTextW(INIT_VALUE_EDIT_SCANNER_RESULT);
 	m_EDIT_PARSER_RESULT.SetWindowTextW(INIT_VALUE_EDIT_PARSER_RESULT);
-	table = new Table("../CompilerPrincipleProject/productions.txt");
+	table = new Table("productions.txt");
 	scanner = nullptr;
 	scan_finished = false;
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
