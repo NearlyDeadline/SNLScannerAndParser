@@ -56,12 +56,14 @@ private:
 		const std::vector<std::set<std::string>>& follow_sets) const;
 	//计算predict集合，传入产生式pro，文法所有First集合first_sets，文法所有Follow集合follow_sets，返回一个保存终极符名称的集合
 
+public:
 	bool is_nonterminal(const std::string& ch) const;
 	//判断文法符号ch是否为非终极符
 
 	bool is_terminal(const std::string& ch) const;
 	//判断文法符号ch是否为终极符
 
+private:
 	size_t get_first_terminal_index(const Production& pro) const;
 	//返回产生式右部首个终极符下标，若全为非终极符则返回pro.size()
 

@@ -110,7 +110,7 @@ LexType Scanner::GetTokenType(string charList)
 		tokenType = CHARC;
 	}
 	else {
-		tokenType = ERROR;
+		tokenType = ERRORR;
 	}
 	return tokenType;
 }
@@ -270,7 +270,7 @@ void Scanner::getTokenList()
 				count++;
 				if (IsLetter(arr[i]))
 				{
-					temptoken = new Token(Lineshow, Word(arr, ERROR));
+					temptoken = new Token(Lineshow, Word(arr, ERRORR));
 					TokenList.push_back(temptoken);
 					break;
 				}
@@ -298,7 +298,7 @@ void Scanner::getTokenList()
 string Scanner::toString(int lextype) {
 	switch (lextype) {
 	case 0:return "ENDFILE";
-	case 1:return "ERROR";
+	case 1:return "ERRORR";
 		/*±£Áô×Ö*/
 	case 2:return "PROGRAM";
 	case 3:return "PROCEDURE";
@@ -358,7 +358,7 @@ void Scanner::printTokenList(const string& tokenListFile) {
 	}
 	while (TokenList.at(i)->word.Lex != ENDFILE)
 	{
-		mycout0 << setw(4) << std::left << TokenList.at(i)->Lineshow << std::left << setw(25) << toString(TokenList.at(i)->word.Lex) << TokenList.at(i)->word.Sem << endl;
+		mycout0 << setw(4) << std::left << TokenList.at(i)->Lineshow << std::left << setw(18) << toString(TokenList.at(i)->word.Lex) << TokenList.at(i)->word.Sem << endl;
 		i++;
 	}
 	mycout0 << TokenList.at(i)->Lineshow << " " << toString(TokenList.at(i)->word.Lex) << " " << TokenList.at(i)->word.Sem << endl;

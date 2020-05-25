@@ -7,19 +7,6 @@
 #include <iostream>
 using namespace std;
 
-void split(const string& s, vector<string>& tokens, const string& delimiters = " ")
-//分割字符串，s为待分割字符串，tokens为保存分割后的字符串的向量，delimiters为分隔符
-{
-	tokens.clear();
-	string::size_type lastPos = s.find_first_not_of(delimiters, 0);
-	string::size_type pos = s.find_first_of(delimiters, lastPos);
-	while (string::npos != pos || string::npos != lastPos) {
-		tokens.push_back(s.substr(lastPos, pos - lastPos));
-		lastPos = s.find_first_not_of(delimiters, pos);
-		pos = s.find_first_of(delimiters, lastPos);
-	}
-}
-
 int main()
 {
 	/*
@@ -36,14 +23,14 @@ int main()
 	//std::cout << table("Program", "PROGRAM");
 
 	//使用如下的方式构造词法分析器并计算Token，参数为SNL语言代码文件路径
-	Scanner sc("snltest.txt");
+	Scanner sc("E:\\Temp\\snltest_easy.txt");
 	sc.getTokenList();
 
 	//使用如下的方式输出Token文件，参数为文件路径
-	sc.printTokenList("snltest_tokens.txt");
+	sc.printTokenList("E:\\Temp\\snltest_easy_tokens.txt");
 
 	//使用如下的方式读取Token文件表进行语法分析，第一个参数为LL(1)分析表，第二个参数为Token文件路径
-	driver(table, "snltest_tokens.txt");
+	driver(table, "E:\\Temp\\snltest_easy_tokens.txt");
 	return 0;
 }
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
