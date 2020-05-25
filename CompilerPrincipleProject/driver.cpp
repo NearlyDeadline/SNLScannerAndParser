@@ -86,7 +86,7 @@ int isVN(string s)
         s == "CallStmRest" ||s == "ActParamList"  ||s == "ActParamMore" ||s == "RelExp"          ||s == "OtherRelE" ||
         s == "Exp"         ||s == "OtherTerm"     ||s == "Term"         ||s == "OtherFactor"     ||s == "Factor" || 
         s == "Variable"    ||s == "VariMore"      ||s == "FieldVar"     ||s == "FieldVarMore"    ||s == "CmpOp" || 
-        s == "AddOp"       ||s == "MultOp")
+        s == "AddOp"       ||s == "MultOp"        )
         return 1;
     else
         return 0;
@@ -95,14 +95,14 @@ int isVN(string s)
 
 int isVT(string s)
 {
-    if (s == "PROGRAM"   || s == "ID"         || s == "$"      ||  s == "TYPE"        || s == "EQ" ||
+    if (s == "PROGRAM"   || s == "ID"         || s == "$"      ||  s == "TYPE"       || s == "EQ" ||
         s == "SEMI"      || s == "INTEGER"    || s == "CHAR"   ||  s == "ARRAY"      || s == "LMIDPAREN"||
         s == "UNDERANGE" || s == "RMIDPAREN"  || s == "OF"     ||  s == "INTC"       || s == "RECORD"||
         s == "END"       || s == "COMMA"      || s == "VAR"    ||  s == "PROCEDURE"  || s == "LPAREN"||
         s == "RPAREN"    || s == "BEGIN"      || s == "ASSIGN" ||  s == "IF"         || s == "THEN"||
         s == "ELSE"      || s == "FI"         || s == "WHILE"  ||  s == "DO"         || s == "ENDWH"||
         s == "READ"      || s == "WRITE"      || s == "RETURN" ||  s == "DOT"        || s == "LT"||
-        s == "PLUS"      || s == "MINUS"      || s == "TIMES"  ||  s == "OVER"       || s == "#")
+        s == "PLUS"      || s == "MINUS"      || s == "TIMES"  ||  s == "OVER"       || s == "#"  )
         return 1;
     else
         return 0;
@@ -161,6 +161,7 @@ void gettoken(string& lineno, string& input, string& concrete, ifstream& tokenLi
 void process1(Stringshed& shed)
 {
     shed.pop();
+	shed.push("DOT");
     shed.push("ProgramBody");
     shed.push("DeclarePart");
     shed.push("ProgramHead");
