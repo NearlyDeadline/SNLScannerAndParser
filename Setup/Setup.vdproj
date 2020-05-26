@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_6F3F530EFA6E432686076B86F173775C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_9DC3C1D78A504E1F9BA36DBAE40559A1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -43,6 +49,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -59,6 +81,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -80,6 +110,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6F3F530EFA6E432686076B86F173775C"
+            {
+            "SourcePath" = "8:..\\GUI\\GUI.ico"
+            "TargetName" = "8:GUI.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_2E5003435A0A41C5A5FD0FD493F05FA7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9DC3C1D78A504E1F9BA36DBAE40559A1"
             {
             "SourcePath" = "8:..\\Debug\\productions.txt"
@@ -89,7 +139,7 @@
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
+            "ReadOnly" = "11:TRUE"
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
             "Permanent" = "11:FALSE"
@@ -149,7 +199,7 @@
                 {
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_4F4C7F37624F4FA0B8397384538DE5F4"
                     {
-                    "Name" = "8:SNL语言词法/语法分析器"
+                    "Name" = "8:SNL语言词法语法分析器"
                     "AlwaysCreate" = "11:FALSE"
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
@@ -188,7 +238,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SNL Scanner Parser"
         "ProductCode" = "8:{2959278C-E6B6-4087-B287-5B1883F3F3EA}"
-        "PackageCode" = "8:{51DB5F01-6A52-49F8-9A45-24B29B4FBD7A}"
+        "PackageCode" = "8:{62008D27-BC2C-49E3-A361-1D9694EE9558}"
         "UpgradeCode" = "8:{974D82C1-F406-4E64-91F8-F157D90CF167}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -310,7 +360,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_10E2613C2AA8464AB8E9B703B8613CDD"
             {
-            "Name" = "8:SNL语言词法/语法分析器"
+            "Name" = "8:SNL语言词法语法分析器"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -319,7 +369,7 @@
             "Target" = "8:_B87EA5F49F62433E91971654FE49B0F7"
             "Folder" = "8:_C278EF8368B74C82A5B47617D2D00A83"
             "WorkingFolder" = "8:_2E5003435A0A41C5A5FD0FD493F05FA7"
-            "Icon" = "8:"
+            "Icon" = "8:_6F3F530EFA6E432686076B86F173775C"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_70DC44BAB2F34F03A84338D0DD48F160"
@@ -333,7 +383,7 @@
             "Target" = "8:_9DC3C1D78A504E1F9BA36DBAE40559A1"
             "Folder" = "8:_4F4C7F37624F4FA0B8397384538DE5F4"
             "WorkingFolder" = "8:_2E5003435A0A41C5A5FD0FD493F05FA7"
-            "Icon" = "8:"
+            "Icon" = "8:_6F3F530EFA6E432686076B86F173775C"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E677EC76057149EBBBD82E4BCC10B8A8"
@@ -347,7 +397,7 @@
             "Target" = "8:_9DC3C1D78A504E1F9BA36DBAE40559A1"
             "Folder" = "8:_C278EF8368B74C82A5B47617D2D00A83"
             "WorkingFolder" = "8:_2E5003435A0A41C5A5FD0FD493F05FA7"
-            "Icon" = "8:"
+            "Icon" = "8:_6F3F530EFA6E432686076B86F173775C"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_EDB96F1D64634EF18014F635FD4D594F"
@@ -361,7 +411,7 @@
             "Target" = "8:_B87EA5F49F62433E91971654FE49B0F7"
             "Folder" = "8:_4F4C7F37624F4FA0B8397384538DE5F4"
             "WorkingFolder" = "8:_2E5003435A0A41C5A5FD0FD493F05FA7"
-            "Icon" = "8:"
+            "Icon" = "8:_6F3F530EFA6E432686076B86F173775C"
             "Feature" = "8:"
             }
         }
