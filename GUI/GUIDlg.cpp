@@ -158,6 +158,8 @@ void CGUIDlg::OnBnClickedButtonBeginParser()//开始语法分析按钮
 
 void CGUIDlg::OnBnClickedButtonBeginScanner()//开始词法分析按钮
 {
+	correcttokenfilepath = "";
+	alltokenfilepath = "";
 	if (!snl_filepath.IsEmpty()) {
 		if (scanner != nullptr)
 			delete scanner;
