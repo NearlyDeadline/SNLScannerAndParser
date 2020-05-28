@@ -1,62 +1,74 @@
 #include "driver.h"
 
-void driver(const Table& table, const string& tokenListFile)
+vector<string> driver(const Table& table, const string& tokenListFile)
 {
-
+    vector<string> result;
     Stringshed anashed;//生成一个语法分析栈
     anashed.push("#");
     anashed.push("Program");
     ifstream tokenList(tokenListFile);//此处打开张磊的TokenList
     if (!tokenList.is_open()) {
-        cout << "打开TokenList文件失败" << endl;
-        return;
+        result.push_back("打开TokenList文件失败");
+        return result;
     }
     string input = "";
     string lineno = "";
     string concrete = "";
-    gettoken(lineno, input,concrete,tokenList);//获得非终极符，和对应的行号
+    string errorinf = "";
+    string inf = "";
+    gettoken(lineno, input, concrete, tokenList);//获得非终极符，和对应的行号
     int con = 1;
-    int countt = 1;
+    int countt = 0;
     while (con == 1 && anashed.shedpoint != -1)//无错误产生且分析栈栈非空
     {
-        if (isVN(anashed.gethead()) == 1)//非终结符
+        if (table.is_nonterminal(anashed.gethead()))//非终结符
         {
             int pnum = table.get_production_index(anashed.gethead(), input);
             if (pnum != 0)
             {
                 predict(pnum, anashed);
-                cout << countt << "使用产生式" << pnum << endl;countt++;
+                inf = "使用产生式" + to_string(pnum);
+                result.push_back(inf);
             }
             else
             {
                 con = 0;
-                cout << "there exsit a error in line:" << lineno << ",concrete:"<<concrete<<",cause:no matchable produce exp" << endl;
+                string head = anashed.gethead();
+                errorinf = "在第" + lineno + "行出现了一个错误:" + concrete + "不能匹配到产生式";
+                result.push_back(errorinf);
             }
         }
-        else if (isVT(anashed.gethead()))//终结符
+        else if (table.is_terminal(anashed.gethead()))//终结符
         {
             if (anashed.gethead() == input)
             {
                 anashed.pop();
-                gettoken(lineno, input, concrete,tokenList);
+                gettoken(lineno, input, concrete, tokenList);
+                inf = "已经成功匹配第" + lineno + "行的终结符" + input;
+                result.push_back(inf);
             }
             else
             {
                 con = 0;
-                cout << "there exsit a error in line:" << lineno << ",concrete:" << concrete << ",cause:fail to match VT" << endl;
+                string head = anashed.gethead();
+                errorinf = "在第" + lineno + "行出现了一个错误:" + "期待在" + input + ":" + concrete + "添加" + head;
+                result.push_back(errorinf);
             }
         }
 
     }
     if (anashed.shedpoint == -1 && input == "eend")
     {
-        cout << "legal sentence!" << endl;
+        inf = "合法的SNL源码！";
+        result.push_back(inf);
     }
     else
     {
-        cout << "error:there exists shed that was not empty!" << endl;
+        errorinf = "SNL源码不合法！";
+        result.push_back(errorinf);
     }
     tokenList.close();
+    return result;
 }
 
 int isVN(string s)
@@ -74,7 +86,7 @@ int isVN(string s)
         s == "CallStmRest" ||s == "ActParamList"  ||s == "ActParamMore" ||s == "RelExp"          ||s == "OtherRelE" ||
         s == "Exp"         ||s == "OtherTerm"     ||s == "Term"         ||s == "OtherFactor"     ||s == "Factor" || 
         s == "Variable"    ||s == "VariMore"      ||s == "FieldVar"     ||s == "FieldVarMore"    ||s == "CmpOp" || 
-        s == "AddOp"       ||s == "MultOp")
+        s == "AddOp"       ||s == "MultOp"        )
         return 1;
     else
         return 0;
@@ -83,14 +95,14 @@ int isVN(string s)
 
 int isVT(string s)
 {
-    if (s == "PROGRAM"   || s == "ID"         || s == "$"      ||  s == "TYPE"        || s == "EQ" ||
+    if (s == "PROGRAM"   || s == "ID"         || s == "$"      ||  s == "TYPE"       || s == "EQ" ||
         s == "SEMI"      || s == "INTEGER"    || s == "CHAR"   ||  s == "ARRAY"      || s == "LMIDPAREN"||
         s == "UNDERANGE" || s == "RMIDPAREN"  || s == "OF"     ||  s == "INTC"       || s == "RECORD"||
         s == "END"       || s == "COMMA"      || s == "VAR"    ||  s == "PROCEDURE"  || s == "LPAREN"||
         s == "RPAREN"    || s == "BEGIN"      || s == "ASSIGN" ||  s == "IF"         || s == "THEN"||
         s == "ELSE"      || s == "FI"         || s == "WHILE"  ||  s == "DO"         || s == "ENDWH"||
         s == "READ"      || s == "WRITE"      || s == "RETURN" ||  s == "DOT"        || s == "LT"||
-        s == "PLUS"      || s == "MINUS"      || s == "TIMES"  ||  s == "OVER"       || s == "#")
+        s == "PLUS"      || s == "MINUS"      || s == "TIMES"  ||  s == "OVER"       || s == "#"  )
         return 1;
     else
         return 0;
@@ -149,6 +161,7 @@ void gettoken(string& lineno, string& input, string& concrete, ifstream& tokenLi
 void process1(Stringshed& shed)
 {
     shed.pop();
+	shed.push("DOT");
     shed.push("ProgramBody");
     shed.push("DeclarePart");
     shed.push("ProgramHead");

@@ -10,7 +10,7 @@
 using namespace std;
 typedef enum
 {
-	ENDFILE, ERROR,
+	ENDFILE, ERRORR,
 	PROGRAM, PROCEDURE, TYPE, VAR, IF,
 	THEN, ELSE, FI, WHILE, DO, ENDWH,
 	BEGIN, END1, READ, WRITE, ARRAY, OF,
@@ -50,27 +50,22 @@ struct Token {			//token的结构
 };
 
 
-typedef enum				//状态的类型
-{
-	START, INASSIGN, INRANGE, INCOMMENT, INNUM, INID, INCHAR, DONE
-}StateType;
-
 class Scanner {
 public:
 	Scanner(const string& codeFile) {
 		this->codeFile = codeFile;
 	}
-	bool IsSeparater(char ch);
+	bool IsSeparater(char ch);//分隔符
 
-	bool IsOperator(char ch);
+	bool IsOperator(char ch);//运算符
 
-	bool IsKeyWord(string ch);
+	bool IsKeyWord(string ch);//关键字和保留字的识别
 
-	bool IsFilter(char ch);
+	bool IsFilter(char ch);//过滤符类型的判断
 
-	bool IsLetter(char ch);
+	bool IsLetter(char ch);//字母类型的判断
 
-	bool IsDigit(char ch);
+	bool IsDigit(char ch);//数字类型的判断
 
 	vector<Token*> TokenList;//TokenList的结构
 
@@ -78,6 +73,6 @@ public:
 	string toString(int lextype);
 	void getTokenList();
 	Word reservedLookup(string s);
-	void printTokenList(const string& tokenListFile);
+	void printTokenList(const string& correcttokenListFile, const string& AlltokenListFile);
 	string codeFile;
 };
